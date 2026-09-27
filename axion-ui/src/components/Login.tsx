@@ -12,7 +12,7 @@ export function Login({ onLogin }: LoginProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === 'bhawani@bid.com' && password === 'Ranchi@123') {
+    if (email === 'bhawani.bid@gmail.com' && password === 'Ranchi@123') {
       onLogin();
     } else {
       setError('Invalid credentials');

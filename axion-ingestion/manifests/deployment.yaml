@@ -19,12 +19,15 @@ spec:
     spec:
       containers:
         - name: ingestion-deployment
-          image: bhawanidocker/axion-ingestion:1.0.0
-          imagePullPolicy: Always
+          image: axionacrdevnmkdck.azurecr.io/axion-ingestion:IMAGE_TAG
+          imagePullPolicy: IfNotPresent
 
           ports:
             - containerPort: 8000
 
           env:
             - name: DATABASE_URL
-              value: "postgresql://admin:admin123@axion-postgres:5432/axiondb"
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: DATABASE_URL

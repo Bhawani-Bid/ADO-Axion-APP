@@ -12,9 +12,9 @@ class Settings:
     # PostgreSQL connection string
     # Format: postgresql://<user>:<password>@<host>:<port>/<database>
     # Example: postgresql://postgres:postgres@localhost:5432/axiondb
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL",
-        "postgresql://admin:admin123@axion-postgres:5432/axiondb",
-    )
+    DATABASE_URL = os.getenv("DATABASE_URL")
+
+    if not DATABASE_URL:
+        raise RuntimeError("DATABASE_URL environment variable is not set")
 
 settings = Settings()

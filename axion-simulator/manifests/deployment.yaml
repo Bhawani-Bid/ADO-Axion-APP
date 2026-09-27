@@ -14,5 +14,13 @@ spec:
     spec:
       containers:
       - name: simulator-deployment
-        image: bhawanidocker/axion-data-simulator:1.0.1
+        image: axionacrdevnmkdck.azurecr.io/axion-simulator:IMAGE_TAG
+        imagePullPolicy: IfNotPresent
+
+        env:
+          - name: API_URL
+            value: "http://ingestion-service.axion-app.svc.cluster.local:80/api/v1/telemetry/ingest"
+
+          - name: INTERVAL_SECONDS
+            value: "5"
         

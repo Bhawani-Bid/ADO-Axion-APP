@@ -1,0 +1,58 @@
+name: postgress database deployment
+
+trigger: none
+
+pool:
+  name: jarvis
+
+variables:
+  namespace: axion-app
+
+stages:
+  - stage: Deploy_PostgreSQL
+    displayName: Deploy PostgreSQL
+
+    jobs:
+      - job: PostgreSQL
+        displayName: Deploy PostgreSQL
+        steps:
+        - checkout: self
+        - task: KubernetesManifest@1
+          inputs:
+            action: 'deploy'
+            connectionType: 'kubernetesServiceConnection'
+            kubernetesServiceConnection: 'AksServiceConnection'
+            namespace: '$(namespace)'
+            manifests: 'manifests/axion-namespace.yaml'
+
+        - task: KubernetesManifest@1
+          inputs:
+            action: 'deploy'
+            connectionType: 'kubernetesServiceConnection'
+            kubernetesServiceConnection: 'AksServiceConnection'
+            namespace: '$(namespace)'
+            manifests: 'manifests/*.yaml'
+
+  - stage: Initialize_Database
+    displayName: Initialize Database
+
+    dependsOn:
+      - Deploy_PostgreSQL
+
+    condition: succeeded()
+
+    jobs:
+      - job: Database_Init
+        displayName: Create Database Tables
+        steps:
+        - checkout: self
+        - task: KubernetesManifest@1
+          inputs:
+            action: 'deploy'
+            connectionType: 'kubernetesServiceConnection'
+            kubernetesServiceConnection: 'AksServiceConnection'
+            namespace: '$(namespace)'
+            manifests: 'manifests/postgres-init-job.yaml'
+
+          
+

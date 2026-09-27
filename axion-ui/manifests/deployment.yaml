@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: ui-deployment
-        image: bhawanidocker/axion-ui:1.0.1
+        image: axionacrdevnmkdck.azurecr.io/axion-ui:IMAGE_TAG
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             memory: "64Mi"
@@ -24,3 +25,10 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 80
+
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: API_BASE
